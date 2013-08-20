@@ -23,4 +23,4 @@ or open [http://localhost:9000/admin](http://localhost:9000/admin), login with :
 License
 ====
 
-loom is available under the terms of the MIT License.
+loom is available under the terms of the [MIT License](http://opensource.org/licenses/MIT).
