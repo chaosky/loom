@@ -1,0 +1,57 @@
+@(title: String, sidebar: String = "", head: Html = Html(""))(content: Html, footer: Html = Html(""))(implicit request: AdminRequest)
+    @import controllers.cadmin._
+    @import loom.models._
+    @import loom.models.admin._
+    @template(title, head) {
+        <!-- Navbar ================================================== -->
+        <div class="masthead">
+            <div id="master-nav" class="navbar">
+                <a class="brand">@Messages("ui.main.head.title")</a>
+                <div class="navbar-inner">
+                    <div class="container">
+                        <ul class="nav">
+                            <li><a href="/">@Msg("ui.admin.home")</a></li>
+                        </ul>
+                        <ul class="nav pull-right">
+                            <li><a href="@cadmin.routes.Settings.password()"><i class="icon-user"> </i> @request.aSession.admin.loginName</a></li>
+                            <li><a href="@cadmin.routes.Application.logout()"><i class="icon-off"> </i> @Messages("ui.main.logout")</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+                <!-- Docs nav ============================================= -->
+            <div class="span2 bs-docs-sidebar">
+                <ul class="nav nav-list bs-docs-sidenav">
+                    <li class="nav-header">@Messages("ui.admin.nav.account")</li>
+                    @tags.ApsnG(APsnG.Admin, APsnG.Account) {
+                        <li class="@active(Model.M_Accounts)"><a href="@cadmin.routes.Admins.list()">@Messages("ui.admin.nav.accountinfo")</a></li>
+                    }
+                    @tags.ApsnG(APsnG.Admin, APsnG.Role) {
+                        <li class="@active(Model.M_Roles)"><a href="@routes.Roles.list()">@Messages("ui.admin.nav.role")</a></li>
+                    }
+                    @tags.ApsnG(APsnG.Admin, APsnG.Permissions) {
+                        <li class="@active(Model.M_Permissions)"><a href="@routes.Permissions.list()">@Messages("ui.admin.nav.permissions")</a></li>
+                    }
+                    @tags.ApsnG(APsnG.Admin, APsnG.User) {
+                        <li class="@active(Model.M_Users)"><a href="@RCall(cadmin.routes.Users.list())">@Msg("ui.admin.nav.user")</a></li>
+                    }
+                    <li class="nav-header">@Messages("ui.admin.nav.app")</li>
+                    @tags.ApsnG(APsnG.Admin, APsnG.App) {
+                        <li class="@active(Model.M_App)"><a href="@cadmin.routes.Apps.list">@Messages("ui.admin.nav.app")</a></li>
+                    }
+                </ul>
+            </div>
+                <!-- content ======================================== -->
+            <div class="span10">
+            @content
+            </div>
+
+        </div>
+        <!-- Footer  ============================================= -->
+        <footer class="footer">
+            <div id="footer"> Copyright 2013</div>
+        </footer>
+        }
+    @active(model: String) = { @if(model == sidebar) {active} }

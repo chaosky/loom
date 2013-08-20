@@ -1,0 +1,77 @@
+@(page: loom.models.Page, applist: List[(Option[loom.models.app.App], loom.models.User)])(implicit request: AdminRequest)
+@import loom.models._
+@import loom.models.app._
+@import loom.models.admin._
+@layout.admin(Messages("m.app.app.list"), Model.M_App) {
+    @tags.requestflash(request)
+    <table class="table table-striped">
+        <thead>
+            <th>@Messages("m.app.app.name")</th>
+            <th>@Messages("m.app.app.owner")</th>
+            <td>@Messages("m.app.app.appkey")</td>
+            <th>@Messages("m.app.app.createdate")</th>
+            <th>#</th>
+        </thead>
+        <tbody>
+        @applist.map { au =>
+            @au._1.fold(Html.empty) { app1 =>
+                <tr>
+                    <td>@app1.name</td>
+                    <td>@if(au._2 != null) {@au._2.name } else {@app1.owner } </td>
+                    <td>@app1.appkey</td>
+                    <td>@app1.createDate</td>
+                    <td>@tags.Apsn(APsn.Admin, APsn.App_Update) { @statusBtn(app1) }</td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+
+    @tags.pagination(page, cadmin.routes.Apps.list)
+}
+
+    @statusBtn(app: App) = {
+
+    @if(app.enable()) {
+        <button class="btn appstatus" title="@Messages("m.status.normal")" value="@app.id"><i class="icon-ok"></i> @Messages("m.app.app.status")</button>
+    } else {
+        <button class="btn btn-inverse appstatus" title="@Messages("m.status.disable")" value="@app.id"><i class="icon-ban-circle icon-white"></i> @Messages("m.app.app.status")</button>
+    }
+    }
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    @tags.Apsn(APsn.Admin, APsn.App_Update) {
+        $(".appstatus").click(function(){
+        var el = this;
+        $.ajax({
+        url : "@cadmin.routes.Apps.status",
+        type: "post",
+        dataType: "json",
+        data : {id : $(el).val()}
+        }).done(function(data){
+        if(data.ret == 0){
+        if(data.event == "disable"){
+        $(el).addClass("btn-inverse").attr("title",m.status.disable);
+        $(el).children("i").removeClass("icon-ok").addClass("icon-ban-circle icon-white");
+        }else if(data.event == "enable"){
+        $(el).removeClass("btn-inverse").attr("title",m.status.normal);
+        $(el).children("i").removeClass("icon-ban-circle icon-white").addClass("icon-ok");
+        }
+        }else{
+        alert(eval(data.msg))
+        }
+        }).fail(function(data){
+        var msg = function(){
+        if(data.responseJSON){
+        if(data.responseJSON.msg) return eval(data.responseJSON.msg);
+        }else{
+        return data.statusText;
+        }
+        }
+        alert("error " + msg());
+        });
+        });
+    }
+    });
+</script>

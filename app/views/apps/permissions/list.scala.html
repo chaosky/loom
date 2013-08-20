@@ -1,0 +1,30 @@
+@(owner: loom.models.User, userpsn: List[(loom.models.User, Option[loom.models.app.UserRole])], hasUpdatePsn: Boolean)(implicit request: AppRequest)
+@import loom.models._
+@layout.apps(Messages("m.app.permission.list"), UModel.M_Permission) {
+    @tags.requestflash(request)
+    <table class="table table-striped">
+        <caption>@Messages("m.app.permission.list")</caption>
+        <thead>
+            <tr>
+                <th>@Messages("m.user.name")</th>
+                <th>@Messages("m.app.permission.permissions")</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@owner.name</td>
+                <td><button class="btn disabled">@Messages("m.app.app.owner")</button></td>
+            </tr>
+            @userpsn.map { case (user, optur) =>
+            <tr>
+                <td><a href="@capp.routes.Permissions.editForm(request.appId, user.id)">@user.name</a></td>
+                <td>@optur.fold(Html("")) { ur =>
+                    @ur.permissions.map { ps =>
+                        <button class="btn disabled">@Messages(ps.i18nMsg)</button>
+                    }
+                }</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}

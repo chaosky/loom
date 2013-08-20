@@ -1,0 +1,35 @@
+@(form: Form[_])(implicit request: AppRequest)
+@layout.user(Messages("m.app.app.edit")) {
+    <form action="@capp.routes.Apps.edit(request.appId)" method="post" class="bs-docs-example form-horizontal" id="inputForm">
+        <fieldset>
+            <legend>@Messages("m.app.app.edit")</legend>
+            @tags.errors(form)
+            @tags.requestflash(request)
+            <input type="hidden" name="id" value="@request.appId">
+            <div class="control-group">
+                <label class="control-label" form="name">@Messages("m.app.app.name")</label>
+                <div class="controls">
+                    <input type="text" name="name" value="@request.appSession.app.name">
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">@Messages("common.save")</button> &nbsp;&nbsp;&nbsp; <button class="btn" type="reset">@Messages("common.reset")</button>&nbsp;&nbsp;&nbsp; <button type="button" class="btn" onclick="history.back()">@Messages("common.back")</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    $("#inputForm").validate({
+    errorClass: "invalid",
+    rules : {
+    "name" : {
+    required: true
+    }
+    }
+    });
+    });
+</script>

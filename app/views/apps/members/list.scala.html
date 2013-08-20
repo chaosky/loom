@@ -1,0 +1,63 @@
+@(owner: loom.models.User, users: List[loom.models.User], hasAddDelPsn: Boolean)(implicit request: AppRequest)
+@import loom.models._
+@layout.apps(Messages("m.app.member.list"), UModel.M_Member) {
+    @tags.requestflash(request)
+    <table class="table table-striped">
+        <caption>@Messages("m.app.member.list")</caption>
+        <input type="hidden" id="member_del_url" value="@capp.routes.Members.del(request.appId)">
+        <thead>
+            <tr>
+                <th>@Messages("m.user.loginname")</th>
+                <th>@Messages("m.user.name")</th>
+                <th>#</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@owner.loginName</td>
+                <td>@owner.name</td>
+                <td><button class="btn disabled">@Messages("m.app.app.owner")</button></td>
+            </tr>
+            @users.map { user =>
+                <tr id="user_@user.id">
+                    <td>@user.loginName</td>
+                    <td>@user.name</td>
+                    <td>@btn(user)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if(hasAddDelPsn) {
+        <a class="btn btn-primary" href="@capp.routes.Members.add(request.appId)">@Messages("m.app.member.add")</a>
+    }
+}
+
+    @btn(user: User) = {
+
+    @if(hasAddDelPsn) {
+        <button class="btn deleteuser" value="@user.id"><i class="icon-remove"></i> @Messages("m.app.member.del")</button>
+    }
+
+    }
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    @if(hasAddDelPsn) {
+        var adUrl = $("#member_del_url").val();
+        $(".deleteuser").click(function(){
+        var el = this;
+        var id = $(el).val();
+        $.ajax({
+        url : adUrl,
+        type: "POST",
+        dataType : "json",
+        data : { userId : id }
+        }).done(function(data){
+        if(data.ret == 0)
+        $("#user_" + id).remove();
+        else alert(data.msg)
+        });
+        });
+    }
+    });
+</script>

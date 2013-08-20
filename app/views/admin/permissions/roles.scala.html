@@ -1,0 +1,53 @@
+@(page: loom.models.PageImpl[loom.models.admin.Role])(implicit request: AdminRequest)
+@import loom.models._
+@import loom.models.admin._
+@layout.template(Messages("m.role.list")) {
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="width:75px;">@Messages("m.role.id")</th>
+                <th style="width:69px;">@Messages("m.role.name")</th>
+                <th>@Messages("m.role.permissions")</th>
+            </tr>
+        </thead>
+        <tbody>
+        @page.result.map { role =>
+            <tr>
+                <td><button class="btn addrole" name="@role.name" value="@role.id"><i class="icon-arrow-up"></i></button></td>
+                <td>@role.name</td>
+                <td class="permissions">@role.permissions.map { p => <button class="btn btn-small disabled">@Messages(p.i18nMsg)</button>
+                }</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    @tags.pagination(page, cadmin.routes.Permissions.roles())
+}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    var topDoc = $(window.top.document);
+    var iframe = topDoc.find("#roles_iframe");
+    iframe.height( iframe[0].contentDocument.body.scrollHeight+'px' );
+    var rolesC = topDoc.find("#roles");
+
+    $(".addrole").click(function(){
+    var el = $(this);
+    var name = el.attr("name");
+    var id = el.val();
+    var permissions = el.parent().parent().children(".permissions").html();
+
+    if(rolesC.find("#role_"+id).is("div"))
+    return;
+
+    var role = '<div id="role_'+ id +'">' +
+    '<span>' +
+    '<input type="checkbox" name="roles['+ id +']" value="'+ id +'" checked>' +
+    name + ' : ' +
+    '</span>' +
+    '<div class="btn-group">' + permissions + '</div>';
+
+    rolesC.append(role);
+    });
+    });
+</script>

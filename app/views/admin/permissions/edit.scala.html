@@ -1,0 +1,57 @@
+@(form: Form[_], account: loom.models.admin.Admin, roles: List[Option[loom.models.admin.Role]], ar: Option[loom.models.admin.AdminRole])(implicit request: AdminRequest)
+    @import controllers.cadmin._
+    @import loom.models._
+    @layout.admin(Messages("m.apsn.edit"), Model.M_Permissions) {
+        <form action="@routes.Permissions.edit(account.id)" method="post" class="bs-docs-example form-horizontal" id="inputForm">
+            <fieldset>
+                <legend>@Messages("m.apsn.edit")</legend>
+                @tags.errors(form)
+                @tags.requestflash(request)
+                <input type="hidden" name="id" value="@account.id">
+                <input type="hidden" name="p" value="@request.getQueryString("p")">
+                <div class="control-group">
+                    <label class="control-label" form="loginName">@Messages("m.account.loginName")</label>
+                    <div class="controls">@account.loginName</div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" form="roles">@Messages("m.apsn.roles")</label>
+                    <div class="controls" id="roles">
+                    @roles.map { role =>
+                        @role.fold(Html("")) { r =>
+                            <div id="role_@r.id"><label class="checkbox inline"><input type="checkbox" name="roles[@r.id]" class="" value="@r.id" @if(ar.fold(false)(_.contains(r.id))) {checked}> @r.name &#58;</label>
+                                <div class="btn-group">
+                                @r.permissions.map { ps =>
+                                    <button class="btn btn-small disabled">@Messages(ps.i18nMsg)</button>
+                                }
+                                </div>
+                            </div>
+                        }
+                    }
+                    </div>
+                </div>
+                <div>
+                    <iframe id="roles_iframe" src="@cadmin.routes.Permissions.roles()" class="" style="width:100%;">
+                    </iframe>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="btn btn-primary">@Messages("common.save")</button> &nbsp;&nbsp;&nbsp; <button class="btn" type="reset">@Messages("common.reset")</button>&nbsp;&nbsp;&nbsp; <button type="button" class="btn" onclick="history.back()">@Messages("common.back")</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    }
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#inputForm").validate({
+        errorClass: "invalid",
+        rules : {
+        "email" : {
+        required: true,
+        email : true
+        }
+        }
+        });
+        });
+    </script>

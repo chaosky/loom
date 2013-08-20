@@ -1,0 +1,40 @@
+@(form: Form[String])(implicit request: AppRequest)
+@import loom.models._
+@layout.apps(Messages("m.app.member.add"), UModel.M_Member) {
+    <form action="@capp.routes.Members.add(request.appId)" method="post" class="bs-docs-example form-horizontal" id="inputForm">
+        <fieldset>
+            <legend>@Messages("m.app.member.add")</legend>
+            @tags.errors(form)
+            @tags.requestflash(request)
+
+            <div class="control-group">
+                <label class="control-label" form="account">@Messages("m.user.loginname")</label>
+                <div class="controls">
+                    <input type="text" name="account" id="account" value="@form.data.get("account")">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">@Messages("common.add")</button>
+                        &nbsp;
+                    <button type="button" class="btn" onclick="history.back()">@Messages("common.back")</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    $("#inputForm").validate({
+    errorClass: "invalid",
+    rules : {
+    "account" : {
+    required : true,
+    email : true
+    }
+    }
+    });
+    });
+</script>

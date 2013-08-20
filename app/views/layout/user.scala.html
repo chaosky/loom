@@ -1,0 +1,28 @@
+@(title: String, head: Html = Html(""))(content: Html)(implicit request: UserRequest)
+@template(title, head) {
+    <!-- Navbar ================================================== -->
+    <div class="masthead">
+        <div id="master-nav" class="navbar">
+            <a class="brand">@Messages("ui.main.head.title")</a>
+            <div class="navbar-inner">
+                <div class="container">
+                    <ul class="nav">
+                        <li><a href="/">Home</a></li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <li><a href="@routes.Settings.password()"><i class="icon-user"> </i> @request.user.loginName</a></li>
+                        <li><a href="@routes.Index.logout()"><i class="icon-off"> </i> @Messages("ui.main.logout")</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Docs nav ================================================== -->
+    <div class="row-fluid">
+    @content
+    </div>
+    <!-- Footer  ================================================== -->
+    <footer class="footer">
+        <div id="footer"> Copyright 2013</div>
+    </footer>
+}

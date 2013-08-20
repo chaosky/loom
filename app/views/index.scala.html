@@ -1,0 +1,35 @@
+@(applist: List[(Option[loom.models.app.App], loom.models.User)])(implicit request: UserRequest)
+@layout.user(Messages("ui.index.title")) {
+    <div class="span12">
+        <div class="row-fluid">
+            <div class="span2">
+                <p class="text-center">@Messages("ui.index.app.list") <i class="icon-chevron-right"></i></p>
+            </div>
+            <div class="span10">
+                @tags.requestflash(request)
+                <table class="table table-striped">
+                    <thead>
+                        <th>@Messages("m.app.app.name")</th>
+                        <th>@Messages("m.app.app.owner")</th>
+                        <th>@Messages("m.app.app.status")</th>
+                        <th>#</th>
+                    </thead>
+                    <tbody>
+                    @applist.map { au =>
+                        @au._1.fold(Html.empty) { app1 =>
+                            <tr>
+                                <td>@app1.name</td>
+                                <td>@if(au._2 != null) {@au._2.name } else {@app1.owner } </td>
+                                <td>@if(app1.enable()) {@Messages("m.status.normal") } else {@Messages("m.status.disable") }</td>
+                                <td>@if(app1.enable()) {<a href="@capp.routes.Apps.index(app1.id)">@Messages("m.app.app.view")</a> }</td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+
+                <a class="btn btn-primary" href="@capp.routes.Apps.createForm">@Messages("m.app.app.create")</a>
+            </div>
+        </div>
+    </div>
+}

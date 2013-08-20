@@ -1,0 +1,69 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET         /                                      controllers.Index.index
+GET         /login                                 controllers.Index.login
+POST        /login                                 controllers.Index.authenticate
+GET         /logout                                controllers.Index.logout
+GET         /signup                                controllers.Index.signupForm
+POST        /signup                                controllers.Index.signup
+GET         /settings/password                     controllers.Settings.password
+POST        /settings/password                     controllers.Settings.changePassword
+GET         /404                                   controllers.Index.page404
+# app
+GET         /app/create                            controllers.capp.Apps.createForm
+POST        /app/create                            controllers.capp.Apps.create
+GET         /app/:appId                            controllers.capp.Apps.index(appId: Long)
+GET         /app/:appId/edit                       controllers.capp.Apps.editForm(appId: Long)
+POST        /app/:appId/edit                       controllers.capp.Apps.edit(appId: Long)
+# app member
+GET         /app/:appId/members                    controllers.capp.Members.list(appId: Long)
+GET         /app/:appId/members/add                controllers.capp.Members.addForm(appId: Long)
+POST        /app/:appId/members/add                controllers.capp.Members.add(appId: Long)
+POST        /app/:appId/members/del                controllers.capp.Members.del(appId: Long)
+# app permission
+GET         /app/:appId/permissions                controllers.capp.Permissions.list(appId: Long)
+GET         /app/:appId/permissions/:userId        controllers.capp.Permissions.editForm(appId:Long, userId: Long)
+POST        /app/:appId/permissions/:userId        controllers.capp.Permissions.edit(appId:Long, userId: Long)
+# admin index
+GET         /admin                                 controllers.cadmin.Application.index
+GET         /admin/login                           controllers.cadmin.Application.login
+POST        /admin/login                           controllers.cadmin.Application.authenticate
+GET         /admin/logout                          controllers.cadmin.Application.logout
+# settings
+GET         /admin/settings/password               controllers.cadmin.Settings.password
+POST        /admin/settings/password               controllers.cadmin.Settings.changePassword
+# Admins
+GET         /admin/accounts                        controllers.cadmin.Admins.list
+GET         /admin/accounts/create                 controllers.cadmin.Admins.createForm
+POST        /admin/accounts/create                 controllers.cadmin.Admins.create
+GET         /admin/accounts/edit/:id               controllers.cadmin.Admins.editForm(id: Long)
+POST        /admin/accounts/edit/:id               controllers.cadmin.Admins.edit(id: Long)
+
+#  --------------  change account status
+#POST        /accounts/disable              controllers.Accountsnts.disable
+POST        /admin/accounts/resetpassword          controllers.cadmin.Admins.resetpassword
+POST        /admin/accounts/togglestatus           controllers.cadmin.Admins.toggleStatus
+# Roles
+GET         /admin/roles                           controllers.cadmin.Roles.list
+GET         /admin/roles/create                    controllers.cadmin.Roles.createForm
+POST        /admin/roles/create                    controllers.cadmin.Roles.create
+POST        /admin/roles/togglestatus              controllers.cadmin.Roles.togglestatus
+GET         /admin/roles/edit/:id                  controllers.cadmin.Roles.editForm(id: Long)
+POST        /admin/roles/edit/:id                  controllers.cadmin.Roles.edit(id: Long)
+# APermission
+GET         /admin/permissions                     controllers.cadmin.Permissions.list
+GET         /admin/permissions/edit/:id            controllers.cadmin.Permissions.editForm(id: Long)
+POST        /admin/permissions/edit/:id            controllers.cadmin.Permissions.edit(id: Long)
+GET         /admin/permissions/roles               controllers.cadmin.Permissions.roles
+# app
+GET         /admin/app                             controllers.cadmin.Apps.list
+POST        /admin/app/status                      controllers.cadmin.Apps.status
+# users
+GET         /admin/users                           controllers.cadmin.Users.list
+POST        /admin/users/password                  controllers.cadmin.Users.password
+POST        /admin/users/status                    controllers.cadmin.Users.status
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file                          controllers.Assets.at(path="/public", file)

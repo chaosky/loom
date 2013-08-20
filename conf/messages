@@ -1,0 +1,220 @@
+ui.main.title=Loom
+ui.main.head.title=Loom
+ui.main.logout=Sign out
+# navbar
+ui.admin.home=Home
+ui.admin.nav.account=Manager account
+ui.admin.nav.accountinfo=Accounts
+ui.admin.nav.role=Roles
+ui.admin.nav.permissions=Permissioins
+ui.admin.nav.app=App
+ui.admin.nav.user=Users
+
+ui.user.nav.basic=Manager
+ui.user.nav.app=App
+ui.user.nav.member=Members
+ui.user.nav.permission=Permissions
+
+ui.index.title=Home
+ui.index.app.list=App list
+
+common.save=Save changes
+common.ok=Ok
+common.reset=Reset
+common.nothing.happened=Nothing happened
+common.success=Success
+common.create=Create
+common.add=Add
+common.back=Back
+common.create.success=Create success
+common.add.success=Add success
+common.error.unknown=Unknown error
+common.not.found=Not found
+common.404=Page not found
+common.500=Server error
+common.error.id=Invalid id
+# login page
+m.login.title=Login
+m.login.head=Loom
+m.login.please.sign.in=Please sign in
+m.login.email=Email
+m.login.password=Password
+m.login.remember.me=Remember me
+m.login.sign.in=Sign in
+m.login.sign.up=Sign up
+
+m.login.invalid=Wrong Email and password combination.
+m.login.logout.success=You''ve been logged out
+m.login.account.not.found=Account not found
+m.login.account.disable=Account disable
+m.login.account.need.verify.email=Account need verify email
+m.login.account.need.reset.password=Account need reset password
+#
+m.signup.title=Sign up
+m.signup.create=Create my account
+# settings
+m.settings.title=Account
+m.settings.name=Name
+m.settings.submit=Save changes
+# password
+m.password.title=Password
+m.password.current=Current password
+m.password.new=New password
+m.password.confirm=Repeat password
+m.password.submit=Save changes
+
+m.password.verifying.dont.match=New and Repeat password don''t match
+m.password.verifying.current.same.new=Same as the current and new passwords
+m.password.error.current.incorrect=The current password you''ve entered is incorrect. Please enter a different password.
+m.password.msg.changed=Your password has been changed!
+
+# Admin
+m.account.list=Account list
+m.account.create=Create new account
+m.account.edit=Edit account
+
+m.account.id=# Id
+m.account.loginName=Login name
+m.account.email=Email
+m.account.password=Password
+m.account.createDate=Create date
+m.account.status=Status
+
+m.account.error.email.registered=This email is already registered.
+m.account.msg.create.success.password=New account password is {0}
+m.account.msg.confirm.resetpassword=Are you sure want to reset this account''s password?
+# Role
+m.role.list=Role list
+m.role.create=Create new role
+m.role.edit=Edit role
+
+m.role.id=#
+m.role.name=Name
+m.role.permissions=Permissions
+m.role.createDate=Create date
+m.role.status=Status
+
+m.role.error.id=Invalid id
+# models text
+m.status.notverified=Email is not verified
+m.status.verified=Email verified
+m.status.resetpassword=Need reset password
+m.status.password.ok=Normal
+m.status.normal=Normal
+m.status.disable=Disable
+
+#permissions group
+m.apsng.admin=Admin
+m.apsng.account=Manage account
+m.apsng.role=Manage role
+m.apsng.permissions=Manage permissions
+m.apsng.user=Manage user
+m.apsng.app=Manage App
+
+#permissions
+m.apsn.edit=Edit permission
+m.apsn.roles=Roles
+m.apsn.list=Permissions list
+m.apsn.permissions=Permissions
+# enum
+m.apsn.admin=Admin
+m.apsn.account.create=Create account
+m.apsn.account.update=Update account
+m.apsn.account.read=Read account
+m.apsn.account.disable=Disable account
+m.apsn.account.resetpassword=Reset password
+m.apsn.account.togglestatus=Change status
+m.apsn.role.create=Create role
+m.apsn.role.update=Update role
+m.apsn.role.read=Read role
+m.apsn.role.disable=Disable role
+m.apsn.permission.update=Update permission
+m.apsn.permission.read=Read permission
+m.apsn.app.read=View App
+m.apsn.app.update=Update App
+
+# user permissions group
+m.upsng.admin=Admin
+m.upsng.project=Project
+m.upsng.member=Member
+m.upsng.permission=Permission
+
+# user permissions
+m.upsn.admin=Admin
+m.upsn.member.read=View member
+m.upsn.member.adddel=Add or del member
+m.upsn.app.update=Update app
+m.upsn.permission.update=Update permission
+m.upsn.permission.read=View permission
+
+m.user.list=User list
+m.user.id=Id
+m.user.loginname=Account
+m.user.name=Name
+m.user.email=Email
+m.user.password=Password
+m.user.createDate=Create date
+m.user.status=Status
+m.user.error.id=Invalid id
+
+m.app.app.list=App list
+m.app.app.create=Create new project
+m.app.app.view=View
+m.app.app.edit=Edit app
+m.app.app.name=Name
+m.app.app.owner=Owner
+m.app.app.status=Status
+m.app.app.appkey=Appkey
+m.app.app.createdate=Create date
+
+m.app.app.error.id=Invalid id
+
+m.app.member.list=Members
+m.app.member.del=Remove
+m.app.member.add=Add member
+
+m.app.member.error.add.self=Can''t add self
+
+m.app.permission.list=User permission
+m.app.permission.edit=Edit permission
+m.app.permission.permissions=Permissions
+
+# --- Constraints
+constraint.password=Password
+# --- Errors
+error.password.veryweak=Please don''t reuse your old password and be sure to choose a strong password (such as one with a combination of letters, numbers, and symbols).
+error.password.weak=That password is too easy to guess. Please choose a stronger password.
+
+#http code
+Unauthorized=Unauthorized
+
+
+#play framework default
+# Default messages
+
+# --- Constraints
+constraint.required=Required
+constraint.min=Minimum value: {0}
+constraint.max=Maximum value: {0}
+constraint.minLength=Minimum length: {0}
+constraint.maxLength=Maximum length: {0}
+constraint.email=Email
+# --- Formats
+format.date=Date (''{0}'')
+format.numeric=Numeric
+format.real=Real
+
+# --- Errors
+error.invalid=Invalid value
+error.required=This field is required
+error.number=Numeric value expected
+error.real=Real number value expected
+error.real.precision=Real number value with no more than {0} digit(s) including {1} decimal(s) expected
+error.min=Must be greater or equal to {0}
+error.min.strict=Must be strictly greater than {0}
+error.max=Must be less or equal to {0}
+error.max.strict=Must be strictly less than {0}
+error.minLength=Minimum length is {0}
+error.maxLength=Maximum length is {0}
+error.email=Valid email required
+error.pattern=Must satisfy {0}

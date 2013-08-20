@@ -1,0 +1,17 @@
+@(request: RequestHeader)
+@if(!request.flash.isEmpty) {
+    @if(request.flash.get("success").isDefined) {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>Well done!</strong>
+            @Messages(request.flash.get("success").get)
+        </div>
+    }
+    @if(request.flash.get("error").isDefined) {
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>Oops!</strong>
+            @Messages(request.flash.get("error").get)
+        </div>
+    }
+}

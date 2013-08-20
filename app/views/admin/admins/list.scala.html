@@ -1,0 +1,112 @@
+@(page: loom.models.PageImpl[loom.models.admin.Admin])(implicit request: AdminRequest)
+@import loom.models._
+@import loom.models.admin._
+@layout.admin(Messages("m.account.list"), Model.M_Accounts) {
+    @tags.requestflash(request)
+    @if(request.flash.get("flag").isDefined) {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            @Messages("m.account.msg.create.success.password", request.flash.get("flag").get)
+        </div>
+    }
+    <table class="table table-striped">
+        <caption>@Messages("m.account.list")</caption>
+        <thead>
+            <tr>
+                <th>@Messages("m.account.loginName")</th>
+                <th>@Messages("m.account.email")</th>
+                <th>@Messages("m.account.createDate")</th>
+                <th>#</th>
+            </tr>
+        </thead>
+        <tbody>
+        @page.result.map { account =>
+            <tr>
+                <td>@if(request.aSession.hasPermissions(APsn.Admin, APsn.Account_Update)) {
+                    <a href="@cadmin.routes.Admins.editForm(account.id)?p=@page.pageNo">@account.loginName</a>
+                } else {@account.loginName }</td>
+                <td>@account.email</td>
+                <td>@account.createDate</td>
+                <td>@statusBtn(account)</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    @tags.pagination(page, cadmin.routes.Admins.list())
+    @tags.Apsn(APermission.Admin, APermission.Account_Create) {
+        <a class="btn btn-primary" href="@cadmin.routes.Admins.createForm()">@Messages("m.account.create")</a>
+    }
+
+}
+        @** main end. The following are other functions **@
+    @statusBtn(account: Admin) = {
+
+    @if(account.contains(Status.EmailNotVerified)) {
+        <button class="btn btn-inverse disabled" title="@Messages("m.status.notverified")"><i class="icon-ban-circle icon-white"></i> @Messages("m.account.email")</button>
+    } else {
+        <button class="btn disabled" title="@Messages("m.status.verified")"><i class="icon-ok"></i> @Messages("m.account.email")</button>
+    }
+
+    @if(account.contains(Status.NeedResetPassword)) {
+        <button class="btn btn-inverse disabled" title="@Messages("m.status.resetpassword")"><i class="icon-refresh icon-white"></i> @Messages("m.account.password")</button>
+    } else {
+        <button class="btn resetpassword" title="@Messages("m.status.password.ok")" value="@account.id"><i class="icon-ok"></i> @Messages("m.account.password")</button>
+    }
+    @if(account.contains(Status.Disable)) {
+        <button class="btn btn-inverse astatus" title="@Messages("m.status.disable")" value="@account.id"><i class="icon-ban-circle icon-white"></i> @Messages("m.account.status")</button>
+    } else {
+        <button class="btn astatus" title="@Messages("m.status.normal")" value="@account.id"><i class="icon-ok"></i> @Messages("m.account.status")</button>
+    }
+
+    }
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    @tags.Apsn(APsn.Admin, APsn.Account_ToggleStatus) {
+        $(".astatus").click(function(){
+        var el = this
+        $.ajax({
+        url : "@cadmin.routes.Admins.toggleStatus()?id=" + $(el).val(),
+        type : "POST",
+        dataType : "json"
+        }).done(function(data){
+        if(data.ret == 0){
+        if(data.event == "disable"){
+        $(el).addClass("btn-inverse").attr("title",m.status.disable);
+        $(el).children("i").removeClass("icon-ok").addClass("icon-ban-circle icon-white");
+        }else if(data.event == "enable"){
+        $(el).removeClass("btn-inverse").attr("title",m.status.normal);
+        $(el).children("i").removeClass("icon-ban-circle icon-white").addClass("icon-ok");
+        }
+        }else{
+        alert(eval(data.msg))
+        }
+        }).fail(function(data){
+        alert("error " + eval(data.responseJSON.msg));
+        });
+        });
+    }
+
+    @tags.Apsn(APsn.Admin, APsn.Account_ResetPassword) {
+        $(".resetpassword").click(function(){
+        var el = this;
+        $.ajax({
+        url : "@cadmin.routes.Admins.resetpassword()?id=" + $(el).val(),
+        type : "POST",
+        dataType : "json"
+        }).done(function(data){
+        if(data.ret == 0){
+        $(el).removeClass("resetpassword").addClass("btn-inverse disabled").attr("title", m.status.resetpassword)
+        $(el).children("i").removeClass("icon-ok").addClass("icon-refresh icon-white")
+        $(el).unbind()
+        }else{
+        alert(eval(data.msg))
+        }
+        }).fail(function(data){
+        alert("error " + eval(data.responseJSON.msg))
+        });
+        });
+    }
+
+    });
+</script>

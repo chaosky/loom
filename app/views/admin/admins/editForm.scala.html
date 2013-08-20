@@ -1,0 +1,46 @@
+@(form: Form[_], account: loom.models.admin.Admin)(implicit request: AdminRequest)
+@import loom.models._
+@import loom.models.admin._
+@layout.admin(Messages("m.account.edit"), Model.M_Accounts) {
+    <form action="@cadmin.routes.Admins.edit(account.id)" method="post" class="bs-docs-example form-horizontal" id="inputForm">
+        <fieldset>
+            <legend>@Messages("m.account.edit")</legend>
+            @tags.errors(form)
+            @tags.requestflash(request)
+            <input type="hidden" name="id" value="@account.id">
+            <input type="hidden" name="p" value="@request.getQueryString("p")">
+            <div class="control-group">
+                <label class="control-label" form="loginName">@Messages("m.account.loginName")</label>
+                <div class="controls">
+                @account.loginName
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" form="email">@Messages("m.account.email")</label>
+                <div class="controls">
+                    <input type="text" name="email" id="email" value="@account.email">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">@Messages("common.save")</button> &nbsp;&nbsp;&nbsp; <button class="btn" type="reset">@Messages("common.reset")</button>&nbsp;&nbsp;&nbsp; <button type="button" class="btn" onclick="history.back()">@Messages("common.back")</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    $("#inputForm").validate({
+    errorClass: "invalid",
+    rules : {
+    "email" : {
+    required: true,
+    email : true
+    }
+    }
+    });
+    });
+</script>

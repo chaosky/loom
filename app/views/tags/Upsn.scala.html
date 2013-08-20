@@ -1,0 +1,2 @@
+@(psn: loom.models.UPsn.Type*)(content: Html = Html(""))(other: Html = Html(""))(implicit request: AppRequest)
+@if(request.isOwner || request.appSession.hasPermissions(psn: _*)){@content}else {@other}

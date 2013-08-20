@@ -1,0 +1,2 @@
+@(upsnG: loom.models.UPsnG.Type*)(content: Html = Html(""))(implicit request: AppRequest)
+@if(request.isOwner || request.appSession.hasPermissions(upsnG.map(_.permissions()).flatten: _*)) {@content }

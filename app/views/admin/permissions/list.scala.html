@@ -1,0 +1,36 @@
+@(page: loom.models.PageImpl[(loom.models.admin.Admin, List[Option[loom.models.admin.Role]])])(implicit request: AdminRequest)
+@import loom.models._
+@import loom.models.admin._
+@layout.admin(Messages("m.apsn.list"), Model.M_Permissions) {
+    @tags.requestflash(request)
+    <table class="table table-striped">
+        <caption>@Messages("m.apsn.list")</caption>
+        <thead>
+            <tr>
+                <th>@Messages("m.account.loginName")</th>
+                <th>@Messages("m.apsn.permissions")</th>
+            </tr>
+        </thead>
+        <tbody>
+        @page.result.map { case (account, roles) =>
+        <tr>
+            <td>@if(request.aSession.hasPermissions(APsn.Admin, APsn.Permission_Update)) {
+                <a href="@cadmin.routes.Permissions.editForm(account.id)">@account.loginName</a>
+            } else {@account.loginName }</td>
+            <td>@roles.map { role =>
+                @role.fold(Html("")) { r =>
+                    <span>@r.name :</span>
+                    <div class="btn-group">
+                    @r.permissions.map { ps =>
+                        <button class="btn disabled">@Messages(ps.i18nMsg)</button>
+                    }
+                    </div>
+                }
+            }</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+    @tags.pagination(page, cadmin.routes.Permissions.list())
+
+}

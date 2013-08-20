@@ -1,0 +1,35 @@
+@(form: Form[_], user: loom.models.User, userRole: Option[loom.models.app.UserRole])(implicit request: AppRequest)
+@import loom.models._
+@layout.apps(Messages("m.app.permission.edit"), UModel.M_Permission) {
+    <form action="@capp.routes.Permissions.edit(request.appId, user.id)" method="post" class="bs-docs-example form-horizontal" id="inputForm">
+        <fieldset>
+            <legend>@Messages("m.app.permission.edit")</legend>
+            @tags.errors(form)
+            @tags.requestflash(request)
+            <input type="hidden" name="id" value="@user.id">
+            <div class="control-group">
+                <label class="control-label" form="name">@Messages("m.user.name")</label>
+                <div class="controls">@user.name</div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" form="permissions">@Messages("m.app.permission.permissions")</label>
+                <div class="controls">
+                @UPsnG.values.map { upsng =>
+                    <div><label class="inline">@Messages(upsng.i18nMsg)</label>
+                        @UPsnG.permissions(upsng).map { upsn =>
+                            <label class="checkbox inline">
+                                <input type="checkbox" name="permissions[@{upsn.id + 199 }]" value="@upsn.enumName" @if(userRole.fold(false)(_.contains(upsn))) {checked}> @Messages(upsn.i18nMsg)</label>
+                        }
+                    </div>
+                }
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">@Messages("common.save")</button> &nbsp;&nbsp;&nbsp; <button class="btn" type="reset">@Messages("common.reset")</button>&nbsp;&nbsp;&nbsp; <button type="button" class="btn" onclick="history.back()">@Messages("common.back")</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+}
+

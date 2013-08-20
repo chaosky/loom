@@ -1,0 +1,27 @@
+@(title: String, sidebar: String = "", head: Html = Html(""))(content: Html)(implicit request: AppRequest)
+@import loom.models._
+@user(title, head) {
+    <div class="span2 bs-docs-sidebar">
+        <ul class="nav nav-list bs-docs-sidenav">
+            <li class=""><a href="@routes.Index.index">Home</a></li>
+            <li class="nav-header">@Messages("ui.user.nav.app")</li>
+            <li class="">
+            @tags.Upsn(UPsn.Admin, UPsn.App_Update) {
+                <a href="@capp.routes.Apps.edit(request.appId)">@request.appSession.app.name</a>
+            } {
+                @request.appSession.app.name
+            }</li>
+            <li class="nav-header">@Messages("ui.user.nav.basic")</li>
+            @tags.UpsnG(UPsnG.Admin, UPsnG.Member) {
+                <li class="@{if(UModel.M_Member == sidebar) "active" }"><a href="@capp.routes.Members.list(request.appId)">@Messages("ui.user.nav.member")</a></li>
+            }
+            @tags.UpsnG(UPsnG.Admin, UPsnG.Permission) {
+                <li class="@{if(UModel.M_Permission == sidebar) "active" }"><a href="@capp.routes.Permissions.list(request.appId)">@Messages("ui.user.nav.permission")</a></li>
+            }
+        </ul>
+    </div>
+    <!-- content ================================================== -->
+    <div class="span10">
+    @content
+    </div>
+}

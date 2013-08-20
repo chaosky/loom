@@ -1,0 +1,58 @@
+@(form: Form[(String, List[String])])(implicit request: AdminRequest)
+@import loom.models._
+@import loom.models.admin._
+@layout.admin(Messages("m.role.create"), Model.M_Roles) {
+    <form action="@cadmin.routes.Roles.create" method="post" class="bs-docs-example form-horizontal" id="inputForm">
+        <fieldset>
+            <legend>@Messages("m.role.create")</legend>
+            @tags.errors(form)
+            @tags.requestflash(request)
+
+            <div class="control-group">
+                <label class="control-label" form="name">@Messages("m.role.name")</label>
+                <div class="controls">
+                    <input type="text" name="name" id="name" value="@form.data.get("name")">
+                </div>
+            </div>
+            @tags.Apsn(APermission.Admin, APermission.Permission_Read) {
+                <div class="control-group">
+                    <label class="control-label">@Messages("m.role.permissions")</label>
+                    <div class="controls">
+                    @APermissionGroup.values.filter(_.visible).map { pg =>
+                        <div><label class="inline">@Messages(pg.i18nMsg) : </label>
+                            @APermissionGroup.permissions(pg).map { ps =>
+                                <label class="checkbox inline">
+                                    <input type="checkbox" name="permissions[@{ps.id + 100 }]" class="" value="@ps.enumName">@Messages(ps.i18nMsg)
+                                </label>
+                            }
+                        </div>
+                    }
+                    </div>
+                </div>
+            }
+
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">@Messages("common.create")</button>
+                        &nbsp;
+                    <button type="button" class="btn" onclick="history.back()">@Messages("common.back")</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    $("#inputForm").validate({
+    errorClass: "invalid",
+    rules : {
+    "name" : {
+    required : true,
+    minlength : @Role.nameMinLen,
+    maxlength : @Role.nameMaxLen
+    }
+    }
+    });
+    });
+</script>

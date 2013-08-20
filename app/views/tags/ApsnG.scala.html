@@ -1,0 +1,2 @@
+@(apsnG: loom.models.admin.APsnG.Type*)(content: Html = Html(""))(implicit request: AdminRequest)
+@if(request.aSession.hasPermissions(apsnG.map(_.permissions()).flatten: _*)) {@content }

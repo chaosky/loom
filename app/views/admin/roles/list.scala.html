@@ -1,0 +1,79 @@
+@(page: loom.models.PageImpl[loom.models.admin.Role])(implicit request: AdminRequest)
+@import loom.models._
+@import loom.models.admin._
+@layout.admin(Messages("m.role.title"), Model.M_Roles) {
+    @tags.requestflash(request)
+    <table class="table table-striped">
+        <caption>@Messages("m.role.list")</caption>
+        <thead>
+            <tr>
+                <th style="width:120px;">@Messages("m.role.name")</th>
+                <th>@Messages("m.role.permissions")</th>
+                <th style="width:170px;">@Messages("m.role.createDate")</th>
+                <th style="width:100px;"><i class="icon-wrench"></i> #</th>
+            </tr>
+        </thead>
+        <tbody>
+        @page.result.map { role =>
+            <tr>
+                <td>@if(request.aSession.hasPermissions(APsn.Admin, APsn.Role_Update)) {
+                    <a href="@cadmin.routes.Roles.editForm(role.id)?p=@page.pageNo">@role.name</a>
+                } else {@role.name }</td>
+                <td>@role.permissions.map { p => <button class="btn btn-small disabled">@Messages(p.i18nMsg)</button> }</td>
+                <td>@role.createDate</td>
+                <td>@tags.Apsn(APsn.Admin, APsn.Role_Disable) { @statusBtn(role) }</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    @tags.pagination(page, cadmin.routes.Roles.list())
+    @tags.Apsn(APsn.Admin, APsn.Role_Create) {
+        <a class="btn btn-primary" href="@cadmin.routes.Roles.createForm()">@Messages("m.role.create")</a>
+    }
+}
+
+    @statusBtn(role: Role) = {
+
+    @if(role.enable()) {
+        <button class="btn rolestatus" title="@Messages("m.status.normal")" value="@role.id"><i class="icon-ok"></i> @Messages("m.role.status")</button>
+    } else {
+        <button class="btn btn-inverse rolestatus" title="@Messages("m.status.disable")" value="@role.id"><i class="icon-ban-circle icon-white"></i> @Messages("m.role.status")</button>
+    }
+
+    }
+<script type="text/javascript">
+    $(document).ready(function(){
+    @tags.Apsn(APsn.Admin, APsn.Role_Disable) {
+        $(".rolestatus").click(function(){
+        var el = this;
+        $.ajax({
+        url : "@cadmin.routes.Roles.togglestatus()",
+        type: "POST",
+        dataType : "json",
+        data : {id: $(el).val()}
+        }).done(function(data){
+        if(data.ret == 0){
+        if(data.event == "disable"){
+        $(el).addClass("btn-inverse").attr("title",m.status.disable);
+        $(el).children("i").removeClass("icon-ok").addClass("icon-ban-circle icon-white");
+        }else if(data.event == "enable"){
+        $(el).removeClass("btn-inverse").attr("title",m.status.normal);
+        $(el).children("i").removeClass("icon-ban-circle icon-white").addClass("icon-ok");
+        }
+        }else{
+        alert(eval(data.msg));
+        }
+        }).fail(function(data){
+        var msg = function(){
+        if(data.responseJSON){
+        if(data.responseJSON.msg) return eval(data.responseJSON.msg);
+        }else{
+        return data.statusText;
+        }
+        }
+        alert("error " + msg());
+        });
+        });
+    }
+    });
+</script>

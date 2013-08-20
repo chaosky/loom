@@ -1,0 +1,8 @@
+@()(implicit request: AdminRequest)
+@import loom.models.admin.APermission
+@layout.admin("index.title") {
+    <h1>index</h1>
+    @tags.Apsn(APermission.Account_Create) {
+        <a>has create user permissioins</a>
+    }
+}

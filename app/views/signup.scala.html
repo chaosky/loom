@@ -1,0 +1,19 @@
+@(form: Form[_])(implicit request: RequestHeader)
+@layout.mini(Messages("m.signup.title")){
+    <h1 class="text-center">@Messages("m.signup.title")</h1>
+    <form class="" action="@routes.Index.signup()" method="post">
+        @tags.requestflash(request)
+        @tags.errors(form)
+        <label>@Messages("m.user.name")</label>
+        <input type="text" name="name" class="input-block-level" value="@form("name").value">
+        <label>@Messages("m.user.email")</label>
+        <input type="text" name="email" class="input-block-level" value="@form("email").value">
+        <label>@Messages("m.login.password")</label>
+        <input type="password" name="password.new" class="input-block-level" >
+        <label>@Messages("m.password.confirm")</label>
+        <input type="password" name="password.confirm" class="input-block-level">
+        <button class="btn btn-large btn-primary" type="submit">@Messages("m.signup.create")</button> &nbsp; <a href="@routes.Index.login">@Messages("m.login.sign.in")</a>
+    </form>
+}
+
+

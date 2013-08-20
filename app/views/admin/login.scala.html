@@ -1,0 +1,17 @@
+@(form: Form[(String, String)])(implicit request: RichRequest)
+    @layout.mini(Messages("m.login.title")) {
+        <header>
+            <h1 class="text-center">@Msg("m.login.head")</h1>
+        </header>
+        <form class="" action="@RCall(cadmin.routes.Application.authenticate())" method="post">
+            <h2 class="form-signin-heading">@Messages("m.login.please.sign.in")</h2>
+            @tags.requestflash(request)
+            @tags.errors(form)
+            <input type="text" name="email" class="input-block-level" placeholder="@Messages("m.login.email")" value="@form("email").value">
+            <input type="password" name="password" class="input-block-level" placeholder="@Messages("m.login.password")">
+            <label class="checkbox">
+                <input type="checkbox" value="remember-me">@Messages("m.login.remember.me")
+            </label>
+            <button class="btn btn-large btn-primary" type="submit">@Messages("m.login.sign.in")</button>
+        </form>
+    }

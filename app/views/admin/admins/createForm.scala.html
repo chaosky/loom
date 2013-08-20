@@ -1,0 +1,38 @@
+@(form: Form[String])(implicit request: AdminRequest)
+@import loom.models._
+@import loom.models.admin._
+@layout.admin(Messages("m.account.create"), Model.M_Accounts) {
+    <form action="@cadmin.routes.Admins.create()" method="post" class="bs-docs-example form-horizontal" id="inputForm">
+        <fieldset>
+            <legend>@Messages("m.account.create")</legend>
+            @tags.errors(form)
+            @tags.requestflash(request)
+            <div class="control-group">
+                <label class="control-label" for="email">@Messages("m.account.email")</label>
+                <div class="controls">
+                    <input type="text" name="email" id="email" placeholder="@Messages("m.account.email")" value="@form.data.get("email")">
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">@Messages("common.create")</button>
+                        &nbsp;
+                    <button type="button" class="btn" onclick="history.back()">@Messages("common.back")</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+}
+<script type="text/javascript">
+    $(document).ready(function(){
+    $("#inputForm").validate({
+    errorClass: "invalid",
+    rules : {
+    "email" : {
+    required: true,
+    email : true
+    }
+    }
+    });
+    });
+</script>

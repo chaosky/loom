@@ -1,0 +1,110 @@
+@(page: loom.models.PageImpl[loom.models.User])(implicit request: AdminRequest)
+    @import loom.models._
+    @import loom.models.admin._
+    @import Implicits._
+    @layout.admin(Messages("m.user.list"), Model.M_Users) {
+        @tags.requestflash(request)
+        @if(request.flash.get("flag").isDefined) {
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                @Messages("m.account.msg.create.success.password", request.flash.get("flag").get)
+            </div>
+        }
+        <table class="table table-striped">
+            <caption>@Messages("m.user.list")</caption>
+            <thead>
+                <tr>
+                    <th>@Messages("m.user.id")</th>
+                    <th>@Messages("m.user.loginname")</th>
+                    <th>@Messages("m.user.email")</th>
+                    <th>@Messages("m.user.createDate")</th>
+                    <th style="min-width: 334px;">#</th>
+                </tr>
+            </thead>
+            <tbody>
+            @page.result.map { user =>
+                <tr>
+                    <td>@user.id</td>
+                    <td>@user.loginName</td>
+                    <td>@user.email</td>
+                    <td>@user.createDate</td>
+                    <td>@statusBtn(user)</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        @tags.rpagination(page, cadmin.routes.Users.list().r)
+
+    }
+        @** main end. The following are other functions **@
+    @statusBtn(user: User) = {
+
+    @if(user.contains(Status.EmailNotVerified)) {
+        <button class="btn btn-inverse disabled" title="@Messages("m.status.notverified")"><i class="icon-ban-circle icon-white"></i> @Messages("m.user.email")</button>
+    } else {
+        <button class="btn disabled" title="@Messages("m.status.verified")"><i class="icon-ok"></i> @Messages("m.user.email")</button>
+    }
+
+    @if(user.contains(Status.NeedResetPassword)) {
+        <button class="btn btn-inverse disabled" title="@Messages("m.status.resetpassword")"><i class="icon-refresh icon-white"></i> @Messages("m.user.password")</button>
+    } else {
+        <button class="btn resetpassword" title="@Messages("m.status.password.ok")" value="@user.id"><i class="icon-ok"></i> @Messages("m.user.password")</button>
+    }
+    @if(user.contains(Status.Disable)) {
+        <button class="btn btn-inverse userstatus" title="@Messages("m.status.disable")" value="@user.id"><i class="icon-ban-circle icon-white"></i> @Messages("m.user.status")</button>
+    } else {
+        <button class="btn userstatus" title="@Messages("m.status.normal")" value="@user.id"><i class="icon-ok"></i> @Messages("m.user.status")</button>
+    }
+
+    }
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+        @tags.Apsn(APsn.Admin, APsn.User_Update) {
+            $(".userstatus").click(function(){
+            var el = this;
+            $.ajax({
+            url : "@cadmin.routes.Users.status?id=" + $(el).val(),
+            type : "POST",
+            dataType : "json"
+            }).done(function(data){
+            if(data.ret == 0){
+            if(data.event == "disable"){
+            $(el).addClass("btn-inverse").attr("title",m.status.disable);
+            $(el).children("i").removeClass("icon-ok").addClass("icon-ban-circle icon-white");
+            }else if(data.event == "enable"){
+            $(el).removeClass("btn-inverse").attr("title",m.status.normal);
+            $(el).children("i").removeClass("icon-ban-circle icon-white").addClass("icon-ok");
+            }
+            }else{
+            alert(eval(data.msg))
+            }
+            }).fail(function(data){
+            alert("error " + eval(data.responseJSON.msg));
+            });
+            });
+        }
+
+        @tags.Apsn(APsn.Admin, APsn.User_Update) {
+            $(".resetpassword").click(function(){
+            var el = this;
+            $.ajax({
+            url : "@cadmin.routes.Users.password()?id=" + $(el).val(),
+            type : "POST",
+            dataType : "json"
+            }).done(function(data){
+            if(data.ret == 0){
+            $(el).removeClass("resetpassword").addClass("btn-inverse disabled").attr("title", m.status.resetpassword)
+            $(el).children("i").removeClass("icon-ok").addClass("icon-refresh icon-white")
+            $(el).unbind()
+            }else{
+            alert(eval(data.msg))
+            }
+            }).fail(function(data){
+            alert("error " + eval(data.responseJSON.msg))
+            });
+            });
+        }
+
+        });
+    </script>

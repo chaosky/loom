@@ -1,0 +1,57 @@
+@(form: Form[_], role: loom.models.admin.Role)(implicit request: AdminRequest)
+    @import loom.models._
+    @import loom.models.admin._
+    @layout.admin(Messages("m.role.edit"), Model.M_Roles) {
+        <form action="@cadmin.routes.Roles.edit(role.id)" method="post" class="bs-docs-example form-horizontal" id="inputForm">
+            <fieldset>
+                <legend>@Messages("m.role.edit")</legend>
+                @tags.errors(form)
+                @tags.requestflash(request)
+                <input type="hidden" name="id" value="@role.id">
+                <input type="hidden" name="p" value="@request.getQueryString("p")">
+                <div class="control-group">
+                    <label class="control-label" form="name">@Messages("m.role.name")</label>
+                    <div class="controls">
+                        <input type="text" name="name" id="name" value="@role.name">
+                    </div>
+                </div>
+                @tags.Apsn(APermission.Admin, APermission.Permission_Update) {
+                    <div class="control-group">
+                        <label class="control-label">@Messages("m.role.permissions")</label>
+                        <div class="controls">
+                        @APermissionGroup.values.filter(_.visible).map { pg =>
+                            <div><label class="inline">@Messages(pg.i18nMsg) : </label>
+                                @APermissionGroup.permissions(pg).map { ps =>
+                                    <label class="checkbox inline">
+                                        <input type="checkbox" name="permissions[@{ps.id + 100 }]" class="" value="@ps.enumName" @if(role.hasPermissions(ps)) {checked }>@Messages(ps.i18nMsg)
+                                    </label>
+                                }
+                            </div>
+                        }
+                        </div>
+                    </div>
+                }
+
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="btn btn-primary">@Messages("common.save")</button> &nbsp;&nbsp;&nbsp; <button class="btn" type="reset">@Messages("common.reset")</button>&nbsp;&nbsp;&nbsp; <button type="button" class="btn" onclick="history.back()">@Messages("common.back")</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    }
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#inputForm").validate({
+        errorClass: "invalid",
+        rules : {
+        "name" : {
+        required : true,
+        minlength : @Role.nameMinLen,
+        maxlength : @Role.nameMaxLen
+        }
+        }
+        });
+        });
+    </script>

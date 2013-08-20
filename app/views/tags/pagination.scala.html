@@ -1,0 +1,25 @@
+@(page: loom.models.Page, call: Call)
+<div class="pagination pagination-centered">
+    <ul>
+        @page.prev.map { prev =>
+        <li><a href="@call.url?p=@prev">&laquo;</a></li>
+        @prev.min(page.pageNo - 3).max(1).until(page.pageNo).map { pg =>
+            <li><a href="@call.url?p=@pg">@pg</a></li>
+        }
+        }.getOrElse {
+            <li class="disabled"><a href="#">&laquo;</a></li>
+        }
+
+        <li class="active"><a href="#">@page.pageNo</a></li>
+        @page.next.map { next =>
+            @next.toLong.max(page.totalPages - 3).to(page.totalPages).map { pg =>
+                <li><a href="@call.url?p=@pg">@pg</a></li>
+            }
+
+        <li><a href="@call.url?p=@next">&raquo;</a></li>
+        }.getOrElse {
+            <li class="disabled"><a href="#">&raquo;</a></li>
+        }
+
+    </ul>
+</div>

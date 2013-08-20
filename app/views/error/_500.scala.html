@@ -1,0 +1,4 @@
+@(i18nMsg: String, args: Any*)(implicit request: RequestHeader)
+@layout.mini(Messages("common.500")) {
+    @Messages(i18nMsg, args)
+}
